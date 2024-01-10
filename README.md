@@ -27,7 +27,7 @@ Before you begin, ensure you have:
 2. **Install Dependencies:**
    
    ```bash
-   pip install requests
+   pip3 install requests
    ```
 
 ## Usage
