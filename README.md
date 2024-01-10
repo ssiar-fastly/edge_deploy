@@ -27,7 +27,7 @@ cd edge_deploy
 The script can be executed from the command line by passing the required parameters. Here's how to use the script:
 
 ```bash
-python deploy_ng_waf.py <api_user> <api_token> <fastly_key> <corp_name> <site_name> <fastly_sid> [--activate] [--percent_enabled <0-100>]
+python edge_deploy.py <api_user> <api_token> <fastly_key> <corp_name> <site_name> <fastly_sid> [--activate] [--percent_enabled <0-100>]
 ```
 
 Replace `<api_user>`, `<api_token>`, `<fastly_key>`, `<corp_name>`, `<site_name>`, and `<fastly_sid>` with your actual Signal Sciences and Fastly details.
@@ -48,13 +48,13 @@ Replace `<api_user>`, `<api_token>`, `<fastly_key>`, `<corp_name>`, `<site_name>
 To deploy NG WAF without activating the Fastly service version:
 
 ```bash
-python deploy_ng_waf.py user@example.com token123 fastlykey123 corp-example site-example fastlyserviceid
+python edge_deploy.py user@example.com token123 fastlykey123 corp-example site-example fastlyserviceid
 ```
 
 To deploy NG WAF and activate the Fastly service version with 10% traffic:
 
 ```bash
-python deploy_ng_waf.py user@example.com token123 fastlykey123 corp-example site-example fastlyserviceid --activate --percent_enabled 10
+python edge_deploy.py user@example.com token123 fastlykey123 corp-example site-example fastlyserviceid --activate --percent_enabled 10
 ```
 
 ## Support
