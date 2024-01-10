@@ -18,8 +18,8 @@ Before you begin, ensure you have the following:
 Clone the repository and navigate to the directory containing the script:
 
 ```bash
-git clone https://github.com/ssiar-fastly/edge_security_deployer
-cd edge_security_deployer
+git clone https://github.com/ssiar-fastly/edge_deploy
+cd edge_deploy
 ```
 
 ## Usage
