@@ -4,67 +4,64 @@ This Python script automates the deployment of Next-Gen Web Application Firewall
 
 ---
 
+# NG WAF Deployment on Magento Fastly Services
+
+This repository contains the `edge_deploy.py` script, designed to automate the deployment of Next-Generation Web Application Firewall (NG WAF) on Magento services using Fastly. The script includes functionality for creating edge security objects and mapping your corporation and site to an existing Fastly service.
+
 ## Prerequisites
 
-Before you begin, ensure you have:
+Before running the script, ensure the following are installed and set up:
 
-- Python 3.x installed on your machine.
-- The `requests` library installed in Python. Install it using `pip install requests`.
-- Access credentials for Signal Sciences (API User and API Token).
-- A Fastly API key with write access.
-- The Corp Name and Site Name for Signal Sciences.
-- The Fastly Service ID (SID) to map.
+- Python 3.x
+- `requests` library for Python (Installable via `pip install requests`)
+- Access credentials for NG WAF and Fastly
 
 ## Setup
 
 1. **Clone the Repository:**
-   
    ```bash
-   git clone https://github.com/your-username/edge-deploy.git
-   cd edge-deploy
+   git clone https://github.com/your-username/your-repository.git
+   cd your-repository
    ```
 
 2. **Install Dependencies:**
-   
    ```bash
    pip3 install requests
    ```
 
 ## Usage
 
-The script can be executed with command-line arguments or environment variables. 
+The script can be executed by providing command-line arguments or by setting environment variables.
 
 ### Using Command-Line Arguments
 
-Execute the script by passing all required parameters:
+Execute the script by passing the required parameters:
 
 ```bash
-python edge_deploy.py --api_user [API_USER] --api_token [API_TOKEN] --fastly_key [FASTLY_KEY] --corp_name [CORP_NAME] --site_name [SITE_NAME] --fastly_sid [FASTLY_SID] [--activate] [--percent_enabled [0-100]]
+python3 edge_deploy.py --ngwaf_user_email 'your_ngwaf_user_email' --ngwaf_token 'your_ngwaf_token' --fastly_token 'your_fastly_token' --corp_name 'your_corp_name' --site_name 'your_site_name' --fastly_sid 'your_fastly_service_id' [--activate] [--percent_enabled <0-100>]
 ```
-
-Replace bracketed items with actual values.
 
 ### Using Environment Variables
 
-1. Set the environment variables:
+Alternatively, you can set the following environment variables:
 
-   ```bash
-   export API_USER='your_api_user'
-   export API_TOKEN='your_api_token'
-   export FASTLY_KEY='your_fastly_key'
-   export CORP_NAME='your_corp_name'
-   export SITE_NAME='your_site_name'
-   export FASTLY_SID='your_fastly_sid'
-   export ACTIVATE='true' # or 'false'
-   export PERCENT_ENABLED='10' # or any value between 0 and 100
-   ```
+```bash
+export NGWAF_USER_EMAIL='your_ngwaf_user_email'
+export NGWAF_TOKEN='your_ngwaf_token'
+export FASTLY_TOKEN='your_fastly_token'
+export CORP_NAME='your_corp_name'
+export SITE_NAME='your_site_name'
+export FASTLY_SID='your_fastly_service_id'
+export ACTIVATE='true' # Optional, default is false
+export PERCENT_ENABLED='10' # Optional, default is 0
+```
 
-2. Run the script:
+Then, run the script without specifying the parameters:
 
-   ```bash
-   python edge_deploy.py
-   ```
+```bash
+python3 edge_deploy.py
+```
 
 ## Contributions
 
-Contributions are welcome! Please feel free to submit a Pull Request or open an issue for any changes you'd like to make.
+Contributions to this project are welcome! Feel free to fork the repository and submit pull requests.
