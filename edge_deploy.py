@@ -48,32 +48,27 @@ def map_to_fastly_service(api_user, api_token, fastly_key, corp_name, site_name,
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Deploy NG WAF on Magento Fastly Services")
-    parser.add_argument('--api_user', help='API user email')
-    parser.add_argument('--api_token', help='API token')
-    parser.add_argument('--fastly_key', help='Fastly API key')
-    parser.add_argument('--corp_name', help='Corporation name')
-    parser.add_argument('--site_name', help='Site name')
-    parser.add_argument('--fastly_sid', help='Fastly Service ID')
-    parser.add_argument('--activate', type=lambda x: (str(x).lower() == 'true'), help='Activate the Fastly service version')
-    parser.add_argument('--percent_enabled', type=int, help='Percentage of traffic to send to NG WAF', default=None)
+    parser.add_argument('--api_user', default=os.environ.get('API_USER'), help='API user email')
+    parser.add_argument('--api_token', default=os.environ.get('API_TOKEN'), help='API token')
+    parser.add_argument('--fastly_key', default=os.environ.get('FASTLY_KEY'), help='Fastly API key')
+    parser.add_argument('--corp_name', default=os.environ.get('CORP_NAME'), help='Corporation name')
+    parser.add_argument('--site_name', default=os.environ.get('SITE_NAME'), help='Site name')
+    parser.add_argument('--fastly_sid', default=os.environ.get('FASTLY_SID'), help='Fastly Service ID')
+    parser.add_argument('--activate', type=lambda x: (str(x).lower() == 'true'), default=os.environ.get('ACTIVATE', 'false').lower() == 'true', help='Activate the Fastly service version')
+    parser.add_argument('--percent_enabled', type=int, default=int(os.environ.get('PERCENT_ENABLED', 0)), help='Percentage of traffic to send to NG WAF')
 
     args = parser.parse_args()
 
-    api_user = args.api_user or os.environ.get('API_USER')
-    api_token = args.api_token or os.environ.get('API_TOKEN')
-    fastly_key = args.fastly_key or os.environ.get('FASTLY_KEY')
-    corp_name = args.corp_name or os.environ.get('CORP_NAME')
-    site_name = args.site_name or os.environ.get('SITE_NAME')
-    fastly_sid = args.fastly_sid or os.environ.get('FASTLY_SID')
-    activate_version = args.activate if args.activate is not None else os.environ.get('ACTIVATE', 'false').lower() == 'true'
-    percent_enabled = args.percent_enabled if args.percent_enabled is not None else int(os.environ.get('PERCENT_ENABLED', 0))
+    # Debug print for each required environment variable
+    required_env_vars = ['API_USER', 'API_TOKEN', 'FASTLY_KEY', 'CORP_NAME', 'SITE_NAME', 'FASTLY_SID']
+    missing_env_vars = [var for var in required_env_vars if not os.environ.get(var)]
+    if missing_env_vars:
+        print(f"Missing environment variables: {', '.join(missing_env_vars)}")
+        exit(1)
 
-    if not all([api_user, api_token, fastly_key, corp_name, site_name, fastly_sid]):
-        parser.error("Missing required arguments or environment variables.")
-
-    if create_edge_security_object(api_user, api_token, corp_name, site_name):
+    if create_edge_security_object(args.api_user, args.api_token, args.corp_name, args.site_name):
         print("Edge security object created successfully.")
-        response = map_to_fastly_service(api_user, api_token, fastly_key, corp_name, site_name, fastly_sid, activate_version, percent_enabled)
+        response = map_to_fastly_service(args.api_user, args.api_token, args.fastly_key, args.corp_name, args.site_name, args.fastly_sid, args.activate, args.percent_enabled)
         if response.status_code == 200:
             print("Edge deployment completed successfully.")
         else:
