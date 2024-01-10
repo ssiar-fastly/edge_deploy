@@ -9,7 +9,7 @@ This Python script automates the deployment of Next-Gen Web Application Firewall
 Before running the script, ensure the following are installed and set up:
 
 - Python 3.x
-- `requests` library for Python (Installable via `pip install requests`)
+- `requests` library for Python (Installable via `pip3 install requests`)
 - Access credentials for NG WAF and Fastly
 
 ## Setup
