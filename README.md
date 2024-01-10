@@ -16,8 +16,8 @@ Before running the script, ensure the following are installed and set up:
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/your-username/your-repository.git
-   cd your-repository
+   git clone https://github.com/ssiar-fastly/edge_deploy.git
+   cd edge_deploy
    ```
 
 2. **Install Dependencies:**
