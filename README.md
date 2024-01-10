@@ -1,62 +1,71 @@
 # NG WAF Deployment Script
 
 This Python script automates the deployment of Next-Gen Web Application Firewall (NG WAF). It handles the creation of edge security services, confirms the creation of Compute instance resources, and maps your corp and site to an existing Fastly service.
+Certainly! Here's a sample `README.md` file for your GitHub repository hosting the `edge_deploy.py` script:
+
+---
 
 ## Prerequisites
 
-Before you begin, ensure you have the following:
+Before you begin, ensure you have:
 
-- Python 3 installed on your machine.
-- `requests` library installed. You can install it using `pip install requests`.
+- Python 3.x installed on your machine.
+- The `requests` library installed in Python. Install it using `pip install requests`.
 - Access credentials for Signal Sciences (API User and API Token).
 - A Fastly API key with write access.
-- The Corp Name and Site Name for the Signal Sciences dashboard.
-- The Fastly Service ID (SID) you wish to map to.
+- The Corp Name and Site Name for Signal Sciences.
+- The Fastly Service ID (SID) to map.
 
-## Installation
+## Setup
 
-Clone the repository and navigate to the directory containing the script:
+1. **Clone the Repository:**
+   
+   ```bash
+   git clone https://github.com/your-username/edge-deploy.git
+   cd edge-deploy
+   ```
 
-```bash
-git clone https://github.com/ssiar-fastly/edge_deploy
-cd edge_deploy
-```
+2. **Install Dependencies:**
+   
+   ```bash
+   pip install requests
+   ```
 
 ## Usage
 
-The script can be executed from the command line by passing the required parameters. Here's how to use the script:
+The script can be executed with command-line arguments or environment variables. 
+
+### Using Command-Line Arguments
+
+Execute the script by passing all required parameters:
 
 ```bash
-python edge_deploy.py <api_user> <api_token> <fastly_key> <corp_name> <site_name> <fastly_sid> [--activate] [--percent_enabled <0-100>]
+python edge_deploy.py --api_user [API_USER] --api_token [API_TOKEN] --fastly_key [FASTLY_KEY] --corp_name [CORP_NAME] --site_name [SITE_NAME] --fastly_sid [FASTLY_SID] [--activate] [--percent_enabled [0-100]]
 ```
 
-Replace `<api_user>`, `<api_token>`, `<fastly_key>`, `<corp_name>`, `<site_name>`, and `<fastly_sid>` with your actual Signal Sciences and Fastly details.
+Replace bracketed items with actual values.
 
-### Arguments
+### Using Environment Variables
 
-- `api_user`: Email associated with the Signal Sciences API user.
-- `api_token`: API token for Signal Sciences.
-- `fastly_key`: Fastly API key with write access.
-- `corp_name`: Name of the corporation in Signal Sciences.
-- `site_name`: Name of the site in Signal Sciences.
-- `fastly_sid`: Fastly Service ID to map.
-- `--activate`: (Optional) Flag to activate the Fastly service version immediately.
-- `--percent_enabled`: (Optional) Integer value between 0 and 100 to set the percentage of traffic to send to the NG WAF.
+1. Set the environment variables:
 
-### Examples
+   ```bash
+   export API_USER='your_api_user'
+   export API_TOKEN='your_api_token'
+   export FASTLY_KEY='your_fastly_key'
+   export CORP_NAME='your_corp_name'
+   export SITE_NAME='your_site_name'
+   export FASTLY_SID='your_fastly_sid'
+   export ACTIVATE='true' # or 'false'
+   export PERCENT_ENABLED='10' # or any value between 0 and 100
+   ```
 
-To deploy NG WAF without activating the Fastly service version:
+2. Run the script:
 
-```bash
-python edge_deploy.py user@example.com token123 fastlykey123 corp-example site-example fastlyserviceid
-```
+   ```bash
+   python edge_deploy.py
+   ```
 
-To deploy NG WAF and activate the Fastly service version with 10% traffic:
+## Contributions
 
-```bash
-python edge_deploy.py user@example.com token123 fastlykey123 corp-example site-example fastlyserviceid --activate --percent_enabled 10
-```
-
-## Support
-
-For issues and feature requests, please file an issue in the GitHub repository issue tracker.
+Contributions are welcome! Please feel free to submit a Pull Request or open an issue for any changes you'd like to make.
