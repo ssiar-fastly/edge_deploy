@@ -58,6 +58,29 @@ Then, run the script without specifying the parameters:
 python3 edge_deploy.py
 ```
 
+
+## Example Scenarios
+
+1. **Deploying with Partial Traffic Ramping:**
+   ```bash
+   python3 edge_deploy.py --ngwaf_user_email 'user@example.com' --ngwaf_token 'token123' --fastly_token 'fastlykey123' --corp_name 'MyCorp' --site_name 'MySite' --fastly_sid 'serviceID' --activate --percent_enabled 25
+   ```
+   This command deploys the NG WAF with 25% of traffic initially routed through the new setup.
+
+2. **Deploying without Activating the Fastly Service:**
+   ```bash
+   python3 edge_deploy.py --ngwaf_user_email 'user@example.com' --ngwaf_token 'token123' --fastly_token 'fastlykey123' --corp_name 'MyCorp' --site_name 'MySite' --fastly_sid 'serviceID'
+   ```
+   This will set up the NG WAF without activating the Fastly service version, allowing for manual activation later.
+
+3. **Deploying with Environment Variables:**
+   First, set the environment variables, then run the script:
+   ```bash
+   python3 edge_deploy.py
+   ```
+   This approach is useful for automation scripts or continuous integration/deployment systems.
+
+
 ## Contributions
 
 Contributions to this project are welcome! Feel free to fork the repository and submit pull requests.
