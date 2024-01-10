@@ -9,12 +9,14 @@ MAX_RETRIES = 3
 RETRY_WAIT = 10
 
 def get_headers(api_user, api_token, fastly_key=None):
+    # Generate headers for API requests
     headers = {"Content-Type": "application/json", "x-api-user": api_user, "x-api-token": api_token}
     if fastly_key:
         headers["Fastly-Key"] = fastly_key
     return headers
 
 def retry_api_call(func):
+    # Decorator to retry API calls upon failure
     def wrapper(*args, **kwargs):
         retries = 0
         while retries < MAX_RETRIES:
@@ -22,24 +24,24 @@ def retry_api_call(func):
             if response.status_code == 200:
                 return response
             retries += 1
-            print(f"Retry {retries}/{MAX_RETRIES} in {RETRY_WAIT}s...")
+            print(f"API call failed, response code: {response.status_code}. Retrying in {RETRY_WAIT}s... (Retry {retries}/{MAX_RETRIES})")
             time.sleep(RETRY_WAIT)
         return response
     return wrapper
 
 @retry_api_call
-def create_edge_security_service(api_user, api_token, corp_name, site_name):
+def create_edge_security_object(api_user, api_token, corp_name, site_name):
+    # Create an edge security object for the specified corp and site
+    print("Creating edge security object...")
     url = f"{BASE_URL}/corps/{corp_name}/sites/{site_name}/edgeDeployment"
     return requests.put(url, headers=get_headers(api_user, api_token))
 
 @retry_api_call
-def confirm_compute_instance(api_user, api_token, corp_name, site_name):
-    url = f"{BASE_URL}/corps/{corp_name}/sites/{site_name}/edgeDeployment"
-    return requests.get(url, headers=get_headers(api_user, api_token))
-
-@retry_api_call
 def map_to_fastly_service(api_user, api_token, fastly_key, corp_name, site_name, fastly_sid, activate_version, percent_enabled):
-    time.sleep(60)  # Waiting for edge configuration
+    # Map the corp and site to a Fastly service and synchronize origins
+    print("Waiting 60 seconds for edge configuration to complete...")
+    time.sleep(60)
+    print("Mapping to Fastly service...")
     url = f"{BASE_URL}/corps/{corp_name}/sites/{site_name}/edgeDeployment/{fastly_sid}"
     payload = {"activateVersion": activate_version, "percentEnabled": percent_enabled}
     return requests.put(url, headers=get_headers(api_user, api_token, fastly_key), json=payload)
@@ -69,10 +71,12 @@ if __name__ == "__main__":
     if not all([api_user, api_token, fastly_key, corp_name, site_name, fastly_sid]):
         parser.error("Missing required arguments or environment variables.")
 
-    # Execute API calls with retry logic
-    if create_edge_security_service(api_user, api_token, corp_name, site_name) and confirm_compute_instance(api_user, api_token, corp_name, site_name):
+    if create_edge_security_object(api_user, api_token, corp_name, site_name):
+        print("Edge security object created successfully.")
         response = map_to_fastly_service(api_user, api_token, fastly_key, corp_name, site_name, fastly_sid, activate_version, percent_enabled)
         if response.status_code == 200:
             print("Edge deployment completed successfully.")
         else:
             print(f"Edge deployment failed: {response.text}")
+    else:
+        print("Failed to create edge security object.")
