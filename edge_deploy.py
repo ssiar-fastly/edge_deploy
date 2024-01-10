@@ -1,0 +1,86 @@
+import requests
+import argparse
+import time
+
+# Constants for the API endpoints
+BASE_URL = "https://dashboard.signalsciences.net/api/v0"
+
+# Function to get headers for making API calls
+def get_headers(api_user, api_token, fastly_key=None):
+    headers = {
+        "Content-Type": "application/json",
+        "x-api-user": api_user,
+        "x-api-token": api_token
+    }
+    if fastly_key:
+        headers["Fastly-Key"] = fastly_key
+    return headers
+
+# Function to create an edge security service
+def create_edge_security_service(api_user, api_token, corp_name, site_name):
+    url = f"{BASE_URL}/corps/{corp_name}/sites/{site_name}/edgeDeployment"
+    response = requests.put(url, headers=get_headers(api_user, api_token))
+    if response.status_code == 200:
+        print("Edge security service created successfully.")
+    else:
+        print(f"Failed to create edge security service: {response.text}")
+    return response.status_code == 200
+
+# Function to confirm the creation of Compute instance resources
+def confirm_compute_instance(api_user, api_token, corp_name, site_name):
+    url = f"{BASE_URL}/corps/{corp_name}/sites/{site_name}/edgeDeployment"
+    response = requests.get(url, headers=get_headers(api_user, api_token))
+    if response.status_code == 200 and "ServicesAttached" in response.json():
+        print("Compute instance resources confirmed.")
+        return True
+    else:
+        print(f"Failed to confirm Compute instance resources: {response.text}")
+    return False
+
+# Function to map to the Fastly service with delay for edge configuration completion
+def map_to_fastly_service(api_user, api_token, fastly_key, corp_name, site_name, fastly_sid, activate_version, percent_enabled):
+    # Wait for edge configuration to complete
+    print("Waiting for edge configuration to complete...")
+    time.sleep(60)  # Wait for 2 minutes
+
+    url = f"{BASE_URL}/corps/{corp_name}/sites/{site_name}/edgeDeployment/{fastly_sid}"
+    payload = {
+        "activateVersion": activate_version,
+        "percentEnabled": percent_enabled
+    }
+    response = requests.put(url, headers=get_headers(api_user, api_token, fastly_key), json=payload)
+    
+    if response.status_code == 200:
+        print("Mapped to Fastly service successfully.")
+    else:
+        print(f"Failed to map to Fastly service: {response.text}")
+        if response.status_code == 400 and "not yet complete" in response.text:
+            print("The edge configuration is still in progress, trying again after 10 seconds.")
+            time.sleep(10)  # Wait for an additional 10 seconds
+            response = requests.put(url, headers=get_headers(api_user, api_token, fastly_key), json=payload)  # Try again
+            if response.status_code == 200:
+                print("Mapped to Fastly service successfully after waiting.")
+            else:
+                print(f"Failed to map to Fastly service after waiting: {response.text}")
+    return response.status_code == 200
+
+# Main function for command-line utility
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Deploy NG WAF on Magento Fastly Services")
+    parser.add_argument('api_user', help='Email associated with the API user')
+    parser.add_argument('api_token', help='API token for Signal Sciences')
+    parser.add_argument('fastly_key', help='Fastly API key with write access')
+    parser.add_argument('corp_name', help='Name of the corporation')
+    parser.add_argument('site_name', help='Name of the site')
+    parser.add_argument('fastly_sid', help='Fastly Service ID to map')
+    parser.add_argument('--activate', default=False, action='store_true', help='Whether to activate the Fastly service version')
+    parser.add_argument('--percent_enabled', type=int, choices=range(0, 101), metavar="[0-100]", help='Percentage of traffic to send to the Next-Gen WAF', default=0)
+
+    args = parser.parse_args()
+
+    # Step 1: Create an edge security service
+    if create_edge_security_service(args.api_user, args.api_token, args.corp_name, args.site_name):
+        # Step 2: Confirm the creation of Compute instance resources
+        if confirm_compute_instance(args.api_user, args.api_token, args.corp_name, args.site_name):
+            # Step 3: Map to the Fastly service with a delay to ensure edge configuration completion
+            map_to_fastly_service(args.api_user, args.api_token, args.fastly_key, args.corp_name, args.site_name, args.fastly_sid, args.activate, args.percent_enabled)
