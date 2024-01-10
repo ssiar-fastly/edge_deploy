@@ -1,6 +1,6 @@
 # NG WAF Deployment Script
 
-This Python script automates the deployment of Next-Gen Web Application Firewall (NG WAF). It handles the creation of edge security services, confirms the creation of Compute instance resources, and maps your corp and site to an existing Fastly service.
+This Python script automates the deployment of Next-Gen Web Application Firewall (NG WAF). It handles the creation of edge security compute object and maps your corp and site to an existing Fastly service.
 
 ---
 
