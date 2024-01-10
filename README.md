@@ -27,6 +27,8 @@ Before running the script, ensure the following are installed and set up:
 
 ## Usage
 
+Watch loom recording: https://www.loom.com/share/864a53963fad457eade298080e14e75d
+
 The script can be executed by providing command-line arguments or by setting environment variables.
 
 ### Using Command-Line Arguments
