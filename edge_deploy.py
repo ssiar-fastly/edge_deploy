@@ -73,7 +73,7 @@ if __name__ == "__main__":
     parser.add_argument('--corp_name', help='Name of the corporation')
     parser.add_argument('--site_name', help='Name of the site')
     parser.add_argument('--fastly_sid', help='Fastly Service ID to map')
-    parser.add_argument('--activate', default=False, action='store_true', help='Whether to activate the Fastly service version')
+    parser.add_argument('--activate', type=lambda x: (str(x).lower() == 'true'), help='Whether to activate the Fastly service version')
     parser.add_argument('--percent_enabled', type=int, choices=range(0, 101), metavar="[0-100]", help='Percentage of traffic to send to the Next-Gen WAF', default=0)
 
     args = parser.parse_args()
