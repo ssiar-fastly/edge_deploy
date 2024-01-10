@@ -16,7 +16,7 @@ def get_headers(ngwaf_user_email, ngwaf_token, fastly_token=None):
         "x-api-token": ngwaf_token
     }
     if fastly_token:
-        headers["Fastly-Token"] = fastly_token
+        headers["Fastly-Key"] = fastly_token
     return headers
 
 def retry_api_call(func):
@@ -26,6 +26,9 @@ def retry_api_call(func):
         while retries < MAX_RETRIES:
             response = func(*args, **kwargs)
             if response.status_code == 200:
+                return response
+            elif response.status_code == 401:
+                print(f"API call failed with Unauthorized (401) error. No retry will be attempted.")
                 return response
             retries += 1
             error_message = response.text if response.text else "No additional error message provided"
@@ -73,4 +76,4 @@ if __name__ == "__main__":
         else:
             print(f"Edge deployment failed during mapping to Fastly service: Status Code {map_response.status_code} - Details: {map_response.text}")
     else:
-        print("Failed to create edge security object.")
+        print(f"Failed to create edge security object. Status Code: {create_response.status_code} - Details: {create_response.text}")
