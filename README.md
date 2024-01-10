@@ -4,10 +4,6 @@ This Python script automates the deployment of Next-Gen Web Application Firewall
 
 ---
 
-# NG WAF Deployment on Magento Fastly Services
-
-This repository contains the `edge_deploy.py` script, designed to automate the deployment of Next-Generation Web Application Firewall (NG WAF) on Magento services using Fastly. The script includes functionality for creating edge security objects and mapping your corporation and site to an existing Fastly service.
-
 ## Prerequisites
 
 Before running the script, ensure the following are installed and set up:
