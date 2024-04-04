@@ -1,6 +1,6 @@
 # NG WAF Deployment Script
 
-This Python script automates the deployment of Next-Gen Web Application Firewall (NG WAF). It handles the creation of edge security compute object and maps your corp and site to an existing Fastly service.
+This Python script automates the deployment of the Next-Gen Web Application Firewall (NG WAF). It not only handles the creation of the edge security compute object and maps your corp and site to an existing Fastly service but now also checks if the specified site exists within the corporation. If the site does not exist, the script will automatically create it before proceeding with the edge security object creation and mapping process.
 
 ---
 
@@ -27,7 +27,7 @@ Before running the script, ensure the following are installed and set up:
 
 ## Usage
 
-Watch loom recording: https://www.loom.com/share/864a53963fad457eade298080e14e75d
+Watch our loom recording for a quick start: https://www.loom.com/share/864a53963fad457eade298080e14e75d
 
 The script can be executed by providing command-line arguments or by setting environment variables.
 
@@ -60,28 +60,30 @@ Then, run the script without specifying the parameters:
 python3 edge_deploy.py
 ```
 
+## New Feature: Site Existence Check and Creation
+
+As part of the deployment process, the script now automatically checks if the specified `--site_name` exists within your `--corp_name`. If the site does not exist, it will be created with the provided site name before proceeding with the deployment. This ensures a smoother and more automated deployment process, reducing manual pre-configuration steps.
 
 ## Example Scenarios
 
-1. **Deploying with Partial Traffic Ramping:**
-   ```bash
-   python3 edge_deploy.py --ngwaf_user_email 'user@example.com' --ngwaf_token 'token123' --fastly_token 'fastlykey123' --corp_name 'MyCorp' --site_name 'MySite' --fastly_sid 'serviceID' --activate --percent_enabled 25
-   ```
-   This command deploys the NG WAF with 25% of traffic initially routed through the new setup.
+- **Deploying with Partial Traffic Ramping:**
+  ```bash
+  python3 edge_deploy.py --ngwaf_user_email 'user@example.com' --ngwaf_token 'token123' --fastly_token 'fastlykey123' --corp_name 'MyCorp' --site_name 'MySite' --fastly_sid 'serviceID' --activate --percent_enabled 25
+  ```
+  This command deploys the NG WAF with 25% of traffic initially routed through the new setup.
 
-2. **Deploying without Activating the Fastly Service:**
-   ```bash
-   python3 edge_deploy.py --ngwaf_user_email 'user@example.com' --ngwaf_token 'token123' --fastly_token 'fastlykey123' --corp_name 'MyCorp' --site_name 'MySite' --fastly_sid 'serviceID'
-   ```
-   This will set up the NG WAF without activating the Fastly service version, allowing for manual activation later.
+- **Deploying without Activating the Fastly Service:**
+  ```bash
+  python3 edge_deploy.py --ngwaf_user_email 'user@example.com' --ngwaf_token 'token123' --fastly_token 'fastlykey123' --corp_name 'MyCorp' --site_name 'MySite' --fastly_sid 'serviceID'
+  ```
+  This will set up the NG WAF without activating the Fastly service version, allowing for manual activation later.
 
-3. **Deploying with Environment Variables:**
-   First, set the environment variables, then run the script:
-   ```bash
-   python3 edge_deploy.py
-   ```
-   This approach is useful for automation scripts or continuous integration/deployment systems.
-
+- **Deploying with Environment Variables:**
+  First, set the environment variables, then run the script:
+  ```bash
+  python3 edge_deploy.py
+  ```
+  This approach is useful for automation scripts or continuous integration/deployment systems.
 
 ## Contributions
 
