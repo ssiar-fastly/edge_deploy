@@ -45,9 +45,6 @@ Before running the script, ensure the following are installed and set up:
 
 ## Usage
 
-### Watch demo video
-Check out this walkthrough of our project: [Project Walkthrough Video](https://www.loom.com/share/88977b2ac2d747fd89b842ece5ee06e3)
-
 The script can be executed by providing command-line arguments or by setting environment variables.
 
 ### Using Command-Line Arguments
@@ -100,6 +97,9 @@ This command deploys the NG WAF with 25% of traffic initially routed through the
   ```
 
 This will set up the NG WAF without activating the Fastly service version, allowing for manual activation later.
+
+### Watch demo video
+Check out this walkthrough of our project: https://www.loom.com/share/88977b2ac2d747fd89b842ece5ee06e3
 
 ## Contributions
 
