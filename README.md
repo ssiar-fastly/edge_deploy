@@ -100,6 +100,7 @@ This will set up the NG WAF without activating the Fastly service version, allow
 
 ### Watch demo video
 Check out this walkthrough of our project: https://www.loom.com/share/88977b2ac2d747fd89b842ece5ee06e3
+Batch deployment update: https://www.loom.com/share/5aa133387d1e4872be216b235b98941c
 
 ## Contributions
 
