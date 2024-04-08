@@ -45,10 +45,12 @@ def check_and_create_site(ngwaf_user_email, ngwaf_token, corp_name, site_name):
     if check_response.status_code == 200:
         print(f"Site {site_name} already exists.")
         return check_response
-    elif check_response.status_code == 400:
+    elif check_response.status_code in [400, 404]:
+        # If the status code is 404, it's also treated as "Site not found"
         try:
             response_json = check_response.json()
-            if response_json.get("message") == "Site not found":
+            site_not_found_messages = ["Site not found", "Invalid resource request"]
+            if response_json.get("message") in site_not_found_messages:
                 print(f"Site {site_name} does not exist, creating...")
                 create_site_url = f"{BASE_URL}/corps/{corp_name}/sites"
                 site_details = {
@@ -75,6 +77,7 @@ def check_and_create_site(ngwaf_user_email, ngwaf_token, corp_name, site_name):
     else:
         print(f"Unexpected response while checking for site existence. Status Code: {check_response.status_code} - Details: {check_response.text}")
         return check_response
+
 
 @retry_api_call
 def create_edge_security_object(ngwaf_user_email, ngwaf_token, corp_name, site_name):
