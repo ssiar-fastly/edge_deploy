@@ -43,6 +43,39 @@ Before running the script, ensure the following are installed and set up:
 - **Activate Version Option:** When mapping a site to a Fastly service, you can choose to activate the service version immediately with the `--activate` flag.
 - **Traffic Ramping:** Control the percentage of traffic to route through the NG WAF using the `--percent_enabled` argument, allowing for gradual ramping up of traffic.
 
+## Using `setup_env.zsh` to Update Local Terminal Environment
+
+To streamline the process of setting environment variables, we have included a script called `setup_env.zsh`. This script will help you set up the necessary environment variables in your terminal session.
+
+### Running the `setup_env.zsh` Script
+
+1. **Make the script executable:**
+   ```bash
+   chmod +x setup_env.zsh
+   ```
+2. **Run the script:**
+   ```bash
+   source setup_env.zsh --update-file
+   ```
+   - The script will prompt you to enter values for `CORP_NAME`, `NGWAF_TOKEN`, and `FASTLY_TOKEN`.
+   - If the `--update-file` flag is passed, it will also prompt for `site_name` and `service_id` and update `file.csv`.
+
+3. **Reload the terminal environment:**
+   After running the script, reload your `.zshrc` to apply the changes:
+   ```bash
+   source ~/.zshrc
+   ```
+
+### Using the Environment Variables
+
+Once the environment variables are set, you can use the new function to load them in future sessions:
+
+```bash
+setenv_<CORP_NAME>
+```
+
+Replace `<CORP_NAME>` with the actual name you provided during the setup.
+
 ## Usage
 
 The script can be executed by providing command-line arguments or by setting environment variables.
@@ -105,3 +138,7 @@ Batch deployment update: https://www.loom.com/share/5aa133387d1e4872be216b235b98
 ## Contributions
 
 Contributions to this project are welcome! Feel free to fork the repository and submit pull requests.
+
+## Contact
+
+Sina Siar - [@ssiar](https://linkedin.com/in/ssiar) - ssiar@fastly.com
