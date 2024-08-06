@@ -1,11 +1,3 @@
-# NG WAF Deployment Script
-
-This Python script automates the deployment of the Next-Gen Web Application Firewall (NG WAF) on Fastly services. It handles the creation of edge security objects, mapping your corporation and site to an existing Fastly service, and supports processing multiple sites from a CSV file.
-
-The latest update enhances the script's functionality with advanced error handling, automated retries for API calls, and more refined control over site mapping and deployment processes.
-
----
-
 ## Prerequisites
 
 Before running the script, ensure the following are installed and set up:
@@ -75,6 +67,37 @@ setenv_<CORP_NAME>
 ```
 
 Replace `<CORP_NAME>` with the actual name you provided during the setup.
+
+## CSV File Input
+
+The script supports processing multiple sites from a CSV file. The CSV file should contain two columns: `site_name` and `fastly_sid`.
+
+### Format of the CSV File
+
+```csv
+site_name,fastly_sid
+site1,serviceID1
+site2,serviceID2
+...
+```
+
+### Using the CSV File
+
+To use the CSV file, provide the file path as a command-line argument:
+
+```bash
+python3 edge_deploy.py --ngwaf_user_email 'your_ngwaf_user_email' --ngwaf_token 'your_ngwaf_token' --fastly_token 'your_fastly_token' --corp_name 'your_corp_name' --csv_file 'path/to/sites.csv' [--activate] [--percent_enabled <0-100>]
+```
+
+### Updating the CSV File with `setup_env.zsh`
+
+If you use the `setup_env.zsh` script with the `--update-file` flag, it will prompt you for `site_name` and `service_id` and update `file.csv` accordingly.
+
+```bash
+source setup_env.zsh --update-file
+```
+
+---
 
 ## Usage
 
