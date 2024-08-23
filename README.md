@@ -23,7 +23,7 @@ Before running the script, ensure the following are installed and set up:
 ### Advanced Error Handling and Retry Logic
 
 - **Retry Mechanism:** The script now includes a retry mechanism for API calls, automatically retrying up to three times with a waiting period for transient network or server errors.
-- **Enhanced Error Messages:** More informative error messages are provided, especially for HTTP 401 Unauthorized errors, to aid in troubleshooting.
+- **Enhanced Error Messages:** More informative error messages are provided, especially for HTTP 401 Unauthorized errors and for specific issues like failing to clone a service on Fastly. If a "failed to clone service" error occurs, the script suggests checking your Fastly API token or creating a new one.
 
 ### Edge Security Object Management
 
@@ -34,6 +34,15 @@ Before running the script, ensure the following are installed and set up:
 
 - **Activate Version Option:** When mapping a site to a Fastly service, you can choose to activate the service version immediately with the `--activate` flag.
 - **Traffic Ramping:** Control the percentage of traffic to route through the NG WAF using the `--percent_enabled` argument, allowing for gradual ramping up of traffic.
+
+### Synchronizing Origins with Fastly Backend
+
+- **`--sync-backend` Flag:** The script now supports synchronizing origins with the Fastly backend after any changes to the origins in the Fastly control panel. This prevents 503 Unknown wasm backend errors.
+- **CSV File Input for Synchronization:** The `--sync-backend` flag works with a CSV file to synchronize multiple sites at once, reading `site_name` and `fastly_sid` from the file.
+
+### Mutually Exclusive Flags for Operations
+
+- **Provisioning and Synchronization:** The script has mutually exclusive flags `--provision` and `--sync-backend` to ensure that only one operation (either provisioning or backend synchronization) is executed at a time.
 
 ## Using `setup_env.zsh` to Update Local Terminal Environment
 
@@ -89,6 +98,12 @@ To use the CSV file, provide the file path as a command-line argument:
 python3 edge_deploy.py --ngwaf_user_email 'your_ngwaf_user_email' --ngwaf_token 'your_ngwaf_token' --fastly_token 'your_fastly_token' --corp_name 'your_corp_name' --csv_file 'path/to/sites.csv' [--activate] [--percent_enabled <0-100>]
 ```
 
+For backend synchronization:
+
+```bash
+python3 edge_deploy.py --sync-backend --csv_file 'path/to/sites.csv'
+```
+
 ### Updating the CSV File with `setup_env.zsh`
 
 If you use the `setup_env.zsh` script with the `--update-file` flag, it will prompt you for `site_name` and `service_id` and update `file.csv` accordingly.
@@ -115,6 +130,14 @@ Alternatively, you can provide a CSV file containing site names and Fastly Servi
 
 ```bash
 python3 edge_deploy.py --ngwaf_user_email 'your_ngwaf_user_email' --ngwaf_token 'your_ngwaf_token' --fastly_token 'your_fastly_token' --corp_name 'your_corp_name' --csv_file 'path/to/sites.csv' [--activate] [--percent_enabled <0-100>]
+```
+
+### Synchronizing Origins with Fastly Backend
+
+To synchronize origins using the CSV file:
+
+```bash
+python3 edge_deploy.py --sync-backend --csv_file 'path/to/sites.csv'
 ```
 
 ### Using Environment Variables
@@ -153,6 +176,13 @@ This command deploys the NG WAF with 25% of traffic initially routed through the
   ```
 
 This will set up the NG WAF without activating the Fastly service version, allowing for manual activation later.
+
+- **Synchronizing Origins for Multiple Sites:**
+  ```bash
+  python3 edge_deploy.py --sync-backend --csv_file 'path/to/sites.csv'
+  ```
+
+This command synchronizes the origins for all sites listed in the provided CSV file.
 
 ### Watch demo video
 Check out this walkthrough of our project: https://www.loom.com/share/88977b2ac2d747fd89b842ece5ee06e3
