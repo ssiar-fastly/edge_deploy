@@ -4,6 +4,7 @@ import argparse
 import json
 import csv
 import re
+import time 
 
 # Constants
 BASE_URL = "https://dashboard.signalsciences.net/api/v0"
