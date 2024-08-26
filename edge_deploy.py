@@ -83,14 +83,23 @@ def check_ngwaf_object_exists(ngwaf_user_email, ngwaf_token, fastly_token, corp_
         # Use regex to match the expected pattern
         match = re.search(rf"se--{corp_name}--[a-z0-9]+\.edgecompute\.app", agent_host_name)
         if match:
-            print(f"NG WAF object found: {match.group(0)}")
+            # Skip the first log message and only proceed with the operation
             return True
         else:
-            print("NG WAF object not found.")
+            print("NG WAF object does not exist.")
+            return False
+    elif response.status_code == 404:
+        response_json = response.json()
+        if response_json.get("message") == "edge deployment missing":
+            print(f"NG WAF object does not exist for {site_name}, creating edge security object...")
+            return False
+        else:
+            print(f"Failed to check NG WAF object. Status Code: {response.status_code} - Details: {response.text}")
             return False
     else:
         print(f"Failed to check NG WAF object. Status Code: {response.status_code} - Details: {response.text}")
         return False
+
 
 @retry_api_call
 def check_and_create_site(ngwaf_user_email, ngwaf_token, corp_name, site_name):
