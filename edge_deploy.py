@@ -165,7 +165,15 @@ def process_single_site(ngwaf_user_email, ngwaf_token, fastly_token, corp_name, 
         print(f"NG WAF object exists for {site_name}, skipping edge object creation and wait time.")
         skip_wait = True
     else:
-        print(f"NG WAF object does not exist for {site_name}, creating edge security object...")
+        print(f"NG WAF object does not exist for {site_name}, checking if site exists...")
+
+        # Check if the site exists, and create it if it does not
+        site_check_response = check_and_create_site(ngwaf_user_email, ngwaf_token, corp_name, site_name)
+        if site_check_response.status_code not in [200, 201]:
+            print(f"Failed to check or create site {site_name}. Status Code: {site_check_response.status_code} - Details: {site_check_response.text}")
+            return
+
+        print(f"Site {site_name} exists or was created successfully, proceeding to create edge security object...")
         skip_wait = False
         create_response = create_edge_security_object(ngwaf_user_email, ngwaf_token, corp_name, site_name)
         if create_response.status_code != 200:
