@@ -52,7 +52,7 @@ To streamline the process of setting environment variables, we have included a s
 
 1. **Make the script executable:**
    ```bash
-   chmod +x setup_env.zsh
+   chmod +x setup-env.zsh
    ```
 2. **Run the script:**
    ```bash
